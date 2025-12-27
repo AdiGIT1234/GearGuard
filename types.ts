@@ -1,8 +1,29 @@
+// -----------------------------
+// VIEW TYPES
+// -----------------------------
+export type ViewType =
+  | 'kanban'
+  | 'calendar'
+  | 'reports'
+  | 'equipment'
+  | 'teams';
 
-export type RequestStatus = 'New' | 'In Progress' | 'Repaired' | 'Scrap';
-export type RequestType = 'Corrective' | 'Preventive';
-export type ViewType = 'kanban' | 'calendar' | 'reports';
+// -----------------------------
+// REQUEST TYPES
+// -----------------------------
+export type RequestStatus =
+  | 'New'
+  | 'In Progress'
+  | 'Repaired'
+  | 'Scrap';
 
+export type RequestType =
+  | 'Corrective'
+  | 'Preventive';
+
+// -----------------------------
+// CORE ENTITIES
+// -----------------------------
 export interface Technician {
   id: string;
   name: string;
@@ -30,16 +51,23 @@ export interface Equipment {
   defaultTechnicianId: string;
 }
 
+// -----------------------------
+// MAINTENANCE REQUEST
+// -----------------------------
 export interface MaintenanceRequest {
   id: string;
   subject: string;
   type: RequestType;
   equipmentId: string;
   scheduledDate: string;
-  duration: number; // in hours
+  duration: number; // hours
   status: RequestStatus;
   assignedTechnicianId: string;
   teamId: string;
 }
 
-export type MaintenanceRequestInput = Omit<MaintenanceRequest, 'id' | 'status'>;
+// -----------------------------
+// FORM INPUT TYPE
+// -----------------------------
+export type MaintenanceRequestInput =
+  Omit<MaintenanceRequest, 'id' | 'status'>;
