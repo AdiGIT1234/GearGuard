@@ -1,0 +1,140 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==============================
+// ENUMS
+// ==============================
+enum UserRole {
+  ADMIN
+  TECHNICIAN
+}
+
+enum EquipmentCategory {
+  MACHINE
+  VEHICLE
+  COMPUTER
+}
+
+enum RequestType {
+  CORRECTIVE
+  PREVENTIVE
+}
+
+enum RequestStatus {
+  NEW
+  IN_PROGRESS
+  REPAIRED
+  SCRAP
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+// ==============================
+// MODELS
+// ==============================
+
+model Department {
+  id          String      @id @default(uuid())
+  name        String      @unique
+  description String?
+
+  equipment   Equipment[]
+}
+
+model User {
+  id           String        @id @default(uuid())
+  fullName     String
+  email        String        @unique
+  role         UserRole
+  isActive     Boolean       @default(true)
+  createdAt    DateTime      @default(now())
+
+  teamMember   TeamMember?
+  assignedReqs MaintenanceRequest[] @relation("AssignedTechnician")
+  ownedEquip   Equipment[]           @relation("AssignedEmployee")
+}
+
+model MaintenanceTeam {
+  id             String        @id @default(uuid())
+  name           String        @unique
+  specialization String?
+  createdAt      DateTime      @default(now())
+
+  members        TeamMember[]
+  equipment      Equipment[]
+  requests       MaintenanceRequest[]
+}
+
+model TeamMember {
+  id     String @id @default(uuid())
+
+  teamId String @unique
+  userId String @unique
+
+  team   MaintenanceTeam @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user   User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Equipment {
+  id                   String            @id @default(uuid())
+  name                 String
+  serialNumber         String            @unique
+  category             EquipmentCategory
+
+  departmentId         String?
+  department           Department?       @relation(fields: [departmentId], references: [id])
+
+  assignedEmployeeId   String?
+  assignedEmployee     User?              @relation("AssignedEmployee", fields: [assignedEmployeeId], references: [id])
+
+  maintenanceTeamId    String?
+  maintenanceTeam      MaintenanceTeam?   @relation(fields: [maintenanceTeamId], references: [id])
+
+  purchaseDate         DateTime?
+  warrantyExpiry       DateTime?
+  location             String?
+  createdAt            DateTime           @default(now())
+
+  requests             MaintenanceRequest[]
+}
+
+
+model MaintenanceRequest {
+  id                   String          @id @default(uuid())
+  subject              String
+  requestType          RequestType
+  status               RequestStatus    @default(NEW)
+  priority             Priority         @default(MEDIUM)
+
+  equipmentId          String
+  equipment            Equipment        @relation(fields: [equipmentId], references: [id])
+
+  maintenanceTeamId    String
+  maintenanceTeam      MaintenanceTeam  @relation(fields: [maintenanceTeamId], references: [id])
+
+  assignedTechnicianId String?
+  assignedTechnician   User?            @relation("AssignedTechnician", fields: [assignedTechnicianId], references: [id])
+
+  scheduledDate        DateTime?
+  startTime            DateTime?
+  endTime              DateTime?
+  durationMinutes      Int?
+  remarks              String?
+
+  createdAt            DateTime         @default(now())
+
+  @@index([status])
+  @@index([requestType])
+  @@index([maintenanceTeamId])
+}

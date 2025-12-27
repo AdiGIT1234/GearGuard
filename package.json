@@ -1,0 +1,23 @@
+{
+  "name": "gearguard-backend",
+  "version": "1.0.0",
+  "description": "Maintenance Management System Backend (GearGuard)",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "node src/server.js",
+    "start": "node src/server.js",
+    "prisma:generate": "npx prisma generate",
+    "prisma:migrate": "npx prisma migrate dev",
+    "seed": "npx ts-node prisma/seed.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "prisma": "^6.0.0",
+    "ts-node": "^10.9.2"
+  }
+}
