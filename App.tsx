@@ -34,9 +34,6 @@ const App: React.FC = () => {
     useState<MaintenanceRequest | null>(null);
   const [modalDate, setModalDate] = useState<Date | undefined>(undefined);
 
-  // -----------------------------
-  // KANBAN STATUS UPDATE
-  // -----------------------------
   const handleStatusChange = useCallback(
     (requestId: string, newStatus: RequestStatus) => {
       setRequests(prev =>
@@ -48,9 +45,6 @@ const App: React.FC = () => {
     []
   );
 
-  // -----------------------------
-  // MODAL HANDLERS
-  // -----------------------------
   const openModalForNew = (date?: Date) => {
     setEditingRequest(null);
     setModalDate(date);
@@ -70,7 +64,6 @@ const App: React.FC = () => {
 
   const handleSaveRequest = (requestData: MaintenanceRequestInput) => {
     if (editingRequest) {
-      // Update existing
       setRequests(prev =>
         prev.map(req =>
           req.id === editingRequest.id
@@ -79,7 +72,6 @@ const App: React.FC = () => {
         )
       );
     } else {
-      // Create new
       const newRequest: MaintenanceRequest = {
         id: `REQ-${Date.now()}`,
         status: 'New',
@@ -90,9 +82,6 @@ const App: React.FC = () => {
     closeModal();
   };
 
-  // -----------------------------
-  // VIEW RENDERING
-  // -----------------------------
   const renderView = () => {
     switch (view) {
       case 'kanban':
@@ -125,12 +114,7 @@ const App: React.FC = () => {
         );
 
       case 'teams':
-        return (
-          <TeamsView
-            teams={teams}
-            requests={requests}
-          />
-        );
+        return <TeamsView teams={teams} requests={requests} />;
 
       case 'reports':
         return (
@@ -146,20 +130,15 @@ const App: React.FC = () => {
     }
   };
 
-  // -----------------------------
-  // APP LAYOUT
-  // -----------------------------
   return (
     <div className="min-h-screen font-sans text-gray-800 dark:text-gray-200">
       <Header
         currentView={view}
         setView={setView}
-        onNewRequestClick={() => openModalForNew()}
+        onNewRequestClick={openModalForNew}
       />
 
-      <main className="p-4 sm:p-6 lg:p-8">
-        {renderView()}
-      </main>
+      <main className="p-4 sm:p-6 lg:p-8">{renderView()}</main>
 
       {isModalOpen && (
         <RequestModal
