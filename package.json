@@ -1,23 +1,38 @@
 {
-  "name": "gearguard-backend",
+  "name": "gearguard-fullstack",
   "version": "1.0.0",
-  "description": "Maintenance Management System Backend (GearGuard)",
+  "description": "Maintenance Management System (GearGuard)",
   "main": "src/server.js",
   "scripts": {
     "dev": "node src/server.js",
+    "dev:frontend": "vite",
+    "dev:both": "concurrently \"npm run dev\" \"npm run dev:frontend\"",
+    "build": "vite build",
+    "preview": "vite preview",
     "start": "node src/server.js",
     "prisma:generate": "npx prisma generate",
     "prisma:migrate": "npx prisma migrate dev",
-    "seed": "npx ts-node prisma/seed.ts"
+    "prisma:studio": "npx prisma studio",
+    "prisma:reset": "npx prisma migrate reset",
+    "seed": "npx ts-node prisma/seed.ts",
+    "setup": "npm install && npm run prisma:generate && npm run prisma:migrate && npm run seed"
   },
   "dependencies": {
     "@prisma/client": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "recharts": "^3.6.0"
   },
   "devDependencies": {
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^4.7.0",
+    "concurrently": "^8.2.2",
     "prisma": "^6.0.0",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "vite": "^5.4.10"
   }
 }
