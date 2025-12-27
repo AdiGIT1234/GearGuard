@@ -96,11 +96,7 @@ model Equipment {
   department           Department?       @relation(fields: [departmentId], references: [id])
 
   assignedEmployeeId   String?
-  assignedEmployee     User?              @relation(
-    "AssignedEmployee",
-    fields: [assignedEmployeeId],
-    references: [id]
-  )
+  assignedEmployee     User?              @relation("AssignedEmployee", fields: [assignedEmployeeId], references: [id])
 
   maintenanceTeamId    String?
   maintenanceTeam      MaintenanceTeam?   @relation(fields: [maintenanceTeamId], references: [id])
@@ -112,6 +108,7 @@ model Equipment {
 
   requests             MaintenanceRequest[]
 }
+
 
 model MaintenanceRequest {
   id                   String          @id @default(uuid())
@@ -127,11 +124,7 @@ model MaintenanceRequest {
   maintenanceTeam      MaintenanceTeam  @relation(fields: [maintenanceTeamId], references: [id])
 
   assignedTechnicianId String?
-  assignedTechnician   User?            @relation(
-    "AssignedTechnician",
-    fields: [assignedTechnicianId],
-    references: [id]
-  )
+  assignedTechnician   User?            @relation("AssignedTechnician", fields: [assignedTechnicianId], references: [id])
 
   scheduledDate        DateTime?
   startTime            DateTime?
